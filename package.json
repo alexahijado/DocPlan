@@ -1,0 +1,25 @@
+{
+  "name": "doctor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.4",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "expressjs": "^1.0.1",
+    "jose": "^5.9.6",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.3",
+    "twilio": "^5.4.0"
+  }
+}
