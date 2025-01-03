@@ -2,7 +2,7 @@ import Foundation
 
 struct HTTPClient {
     static let shared = HTTPClient()
-    private let baseURL = "http://localhost:5000/api"
+    private let baseURL = "docplan.netlify.app"
 
     func request<T: Decodable>(endpoint: String, method: String, body: Data? = nil, completion: @escaping (Result<T, Error>) -> Void) {
         guard let url = URL(string: baseURL + endpoint) else {

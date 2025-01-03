@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+const cors = require('cors'); // Add CORS dependency
 const appointmentRoutes = require('./routes/appointments');
 const authRoutes = require('./routes/auth');
 const notificationRoutes = require('./routes/notifications');
@@ -10,9 +11,10 @@ const notificationRoutes = require('./routes/notifications');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Middleware
+app.use(cors()); // Fix CORS middleware placement
 app.use(bodyParser.json());
 
 // MongoDB Connection
@@ -25,7 +27,7 @@ const connectWithRetry = () => {
     .catch(err => {
       console.error('MongoDB connection error:', err);
       console.log('Retrying in 5 seconds...');
-      setTimeout(connectWithRetry, 5000); // Retry after 5 seconds
+      setTimeout(connectWithRetry, 27017); // Retry after 5 seconds
     });
 };
 

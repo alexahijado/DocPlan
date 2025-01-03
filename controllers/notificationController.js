@@ -1,3 +1,11 @@
+// controllers/notificationController.js
+const Appointment = require('../models/Appointment');
+const sgMail = require('@sendgrid/mail');
+const twilio = require('twilio');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
 exports.sendReminder = async (req, res) => {
   try {
     const { appointmentId } = req.body;
@@ -5,17 +13,12 @@ exports.sendReminder = async (req, res) => {
 
     if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
 
-    const doctor = await User.findById(appointment.doctor);
-    if (!doctor || !doctor.senderEmail) {
-      return res.status(400).json({ message: 'Doctor email not configured for notifications' });
-    }
-
     const message = `Reminder: You have an appointment scheduled on ${appointment.date}.`;
 
-    // Send email from the doctor's custom email
+    // Send email
     const email = {
       to: appointment.patient.email,
-      from: doctor.senderEmail, // Use the doctor's email
+      from: process.env.EMAIL_FROM,
       subject: 'Appointment Reminder',
       text: message,
     };
@@ -27,11 +30,11 @@ exports.sendReminder = async (req, res) => {
       return res.status(500).json({ message: 'Failed to send email reminder' });
     }
 
-    // Send SMS using a generic phone number
+    // Send SMS
     try {
       const smsResponse = await twilioClient.messages.create({
         body: message,
-        from: process.env.TWILIO_PHONE_NUMBER, // Generic phone number
+        from: process.env.TWILIO_PHONE_NUMBER,
         to: appointment.patient.phoneNumber,
       });
       console.log('SMS sent:', smsResponse.sid);
